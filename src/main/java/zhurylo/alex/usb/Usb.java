@@ -7,10 +7,12 @@ import java.io.IOException;
 
 public class Usb {
     public static void main(String[] args) throws IOException {
-        Window window = new Window();
-        String drive = (new DetectedDrive()).USBDetect();
-        if (drive != null && !drive.isEmpty()) {
-            Serializator.test(drive);
+
+        new DetectedDrive();
+        if ( DetectedDrive.USBDetect() != null && ! DetectedDrive.USBDetect().isEmpty()) {
+            Serializator.test(DetectedDrive.USBDetect());
+        }else{
+            Window window = new Window();
         }
     }
 }
