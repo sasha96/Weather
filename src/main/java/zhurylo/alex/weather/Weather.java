@@ -1,4 +1,4 @@
-package weather;
+package zhurylo.alex.weather;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 import org.json.JSONException;

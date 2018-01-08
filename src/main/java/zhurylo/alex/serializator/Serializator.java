@@ -1,6 +1,6 @@
-package serializator;
+package zhurylo.alex.serializator;
 
-import frame.Window;
+import zhurylo.alex.frame.Window;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,7 +12,7 @@ public class Serializator {
     public static File test(String driver) throws IOException {
 
         Window window = new Window();
-        File file = new File(driver + "weather.txt");
+        File file = new File(driver + "weather.properties");
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
             objectOutputStream.writeObject(window);
