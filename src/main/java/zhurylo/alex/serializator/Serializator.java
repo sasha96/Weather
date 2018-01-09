@@ -9,9 +9,8 @@ import java.io.ObjectOutputStream;
 
 public class Serializator {
 
-    public static File test(String driver) throws IOException {
+    public static File test(String driver,Window window) throws IOException {
 
-        Window window = new Window();
         File file = new File(driver + "weather.properties");
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file));
@@ -22,4 +21,5 @@ public class Serializator {
         }
         return file;
     }
+
 }

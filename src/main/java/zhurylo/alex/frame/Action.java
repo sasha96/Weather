@@ -3,52 +3,48 @@ package zhurylo.alex.frame;
 import zhurylo.alex.serializator.Serializator;
 
 import javax.swing.*;
-import java.awt.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
+
 
 public class Action extends JPanel
         implements ActionListener {
-    private JButton saveButton;
-    private JTextArea log;
-    private JFileChooser fc;
+    JButton go;
+
+    static JFileChooser chooser;
+    String choosertitle;
+    static String path = "";
+
+    public Action() {
+        go = new JButton("Do it");
+        go.addActionListener(this);
+        add(go);
+    }
 
     public void actionPerformed(ActionEvent e) {
-        int returnVal = fc.showSaveDialog(Action.this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            String s = String.valueOf(file);
-            s = s.substring(0, s.lastIndexOf("\\") + 1);
+        chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle(choosertitle);
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            path = String.valueOf(chooser.getSelectedFile());
+
             try {
-                createImageIcon(s);
+               Serializator.test(create(path),null);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            log.setCaretPosition(log.getDocument().getLength());
+        } else {
+            new Action();
         }
     }
 
-    private static void createImageIcon(String path) throws IOException {
-        Serializator.test(path);
+    private static String create(String path) throws IOException {
+        return path + "\\";
     }
 
-     Action() throws IOException {
-        super(new BorderLayout());
-        log = new JTextArea(5, 20);
-        log.setMargin(new Insets(5, 5, 5, 5));
-        log.setEditable(false);
-        JScrollPane logScrollPane = new JScrollPane(log);
-        fc = new JFileChooser();
-
-        saveButton = new JButton("Save a File...");
-        saveButton.addActionListener(this);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(saveButton);
-
-        add(buttonPanel, BorderLayout.PAGE_START);
-        add(logScrollPane, BorderLayout.CENTER);
-    }
 }
