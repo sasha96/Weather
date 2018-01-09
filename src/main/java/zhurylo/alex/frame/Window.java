@@ -4,56 +4,69 @@ import zhurylo.alex.usb.DetectedDrive;
 import zhurylo.alex.weather.Weather;
 
 import javax.swing.*;
+import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.Serializable;
 
-public class Window implements Serializable, ActionListener {
+public class Window implements Serializable {
     private String space = "                      ";
-    static private String first;
-    static private String second;
-    static JButton j = new JButton("Browse");
-    static String textAboutDriver = searchDriver(j);
+    static private String firstField;
+    static private String secondField;
+    static JButton jButton = new JButton("Browse");
+    static String textAboutDriver = searchDriver(jButton);
 
     private String method() {
         if (textAboutDriver.contains("'")) {
-            first = textAboutDriver.substring(0, textAboutDriver.lastIndexOf("'") + 1);
-            second = textAboutDriver.substring(textAboutDriver.lastIndexOf("'") + 1, textAboutDriver.length());
+            firstField = textAboutDriver.substring(0, textAboutDriver.lastIndexOf("'") + 1);
+            secondField = textAboutDriver.substring(textAboutDriver.lastIndexOf("'") + 1, textAboutDriver.length());
         } else {
-            first = textAboutDriver;
-            second = null;
+            firstField = textAboutDriver;
+            secondField = null;
         }
         return textAboutDriver;
     }
 
-    public Window() throws IOException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+    public Window()  {
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         JFrame.setDefaultLookAndFeelDecorated(true);
         Weather weather = new Weather();
-        float[] array = weather.test();
+        float[] array = new float[0];
+        try {
+            array = weather.test();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         JPanel jPanel = new JPanel();
 
-
         textAboutDriver = method();
 
-
-        j.setPreferredSize(new Dimension(80, 30));
-        j.setBackground(Color.gray);
-        jPanel.add(j);
+        jButton.setPreferredSize(new DimensionUIResource(80, 30));
+        jButton.setBackground(Color.gray);
+        jPanel.add(jButton);
 
         JLabel jLabelTextDriver;
-        jLabelTextDriver = new JLabel(first);
-        JLabel jLabelTextDriver2 = new JLabel(second);
+        jLabelTextDriver = new JLabel(firstField);
+        JLabel jLabelTextDriver2 = new JLabel(secondField);
 
         jPanel.add(jLabelTextDriver);
         jPanel.add(jLabelTextDriver2);
 
         JPanel jPanel2 = new JPanel();
-        GridLayout g = new GridLayout(4, 2);
-        jPanel2.setLayout(g);
+        GridLayout gridLayout = new GridLayout(4, 2);
+        jPanel2.setLayout(gridLayout);
 
         JLabel jLabelTemperature = new JLabel(space + "Temperature :");
         JLabel jLabelWind = new JLabel(space + "Wind :");
@@ -92,29 +105,20 @@ public class Window implements Serializable, ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private static String searchDriver(JButton jbuttonBrowse) {
+    private static String searchDriver(JButton jButton) {
         String textAboutDriver = DetectedDrive.USBDetect();
         if (textAboutDriver.equals("")) {
             textAboutDriver = "USB Drive not found.Please click 'Browse' to choose folder where data must be saved ";
-            actionListner(jbuttonBrowse);
+            actionListner(jButton);
         } else {
             textAboutDriver = "USB Drive found. The data was saved to " + textAboutDriver;
         }
-
         return textAboutDriver;
     }
 
-    private static String actionListner(JButton jbuttonBrowse) {
-
+    private static void actionListner(JButton jbuttonBrowse) {
         ActionListener actionListener = new Action();
         jbuttonBrowse.addActionListener(actionListener);
-        textAboutDriver = "sdafs";
-        return textAboutDriver;
-    }
-
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
 
     }
 }

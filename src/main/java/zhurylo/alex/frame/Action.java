@@ -34,7 +34,7 @@ public class Action extends JPanel
             path = String.valueOf(chooser.getSelectedFile());
 
             try {
-               Serializator.test(create(path),null);
+               Serializator.test(createPath(path),null);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -43,7 +43,7 @@ public class Action extends JPanel
         }
     }
 
-    private static String create(String path) throws IOException {
+    private static String createPath(String path) throws IOException {
         return path + "\\";
     }
 
